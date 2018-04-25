@@ -6,12 +6,20 @@
 package client;
 
 import interfaces.I_Client;
+import java.util.Scanner;
 
 /**
  *
  * @author Menja
  */
 public class Client implements I_Client{
+    private Scanner scanner;
+    
+    public Client() {
+        scanner = new Scanner(System.in);
+    }
+    
+    
 
     @Override
     public void connectToServer(String ipAddress, int port) {
@@ -25,12 +33,13 @@ public class Client implements I_Client{
 
     @Override
     public void sendMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(message);
     }
 
     @Override
-    public String askForString(String question) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String askForAddress(String question) {
+        sendMessage(question);
+        return scanner.nextLine();
     }
 
     @Override
@@ -39,13 +48,14 @@ public class Client implements I_Client{
     }
 
     @Override
-    public String askForEmail(String question) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String askForName(String question) {
+        sendMessage(question);
+        return scanner.nextLine();
     }
 
     @Override
-    public int askForInterger(String question) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int askForAge(String question) {
+        return 0;
     }
 
     @Override

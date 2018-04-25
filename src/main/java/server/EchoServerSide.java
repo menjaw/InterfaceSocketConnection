@@ -5,7 +5,9 @@
  */
 package server;
 
+import client.Client;
 import control.ClientHandler;
+import interfaces.I_Client;
 import interfaces.I_Server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -30,8 +32,21 @@ public class EchoServerSide implements I_Server {
 
     //Run
     public static void main(String[] args) throws IOException {
+        I_Client i_client = new Client();
+        ClientHandler handler = new ClientHandler(i_client);
+        handler.run();
+
         System.out.println("The server is listening");
         new EchoServerSide().listenForClients();//opretter en instans af sig selv og kalder på lytte-metoden
+        
+        //WHILE VIRKER IKKE
+        while (true) {
+//            //En Socket er et endpoint (stikkontakt) for kommunikation mellem to maskiner
+//            //Socket-metoden Creater en uConnected socket
+//            //accept()-metoden lytter efter connections der laves til denne socket og accepterer det. Den blokerer indtil der er lavet en connection
+//            Socket socket = serverSocket.accept();
+//            new ClientHandler().start();
+        }
     }
 
     //Methods
@@ -45,13 +60,6 @@ public class EchoServerSide implements I_Server {
             //InetSocketAddressProvides an immutable(uforanderlig) object used by sockets for binding, connecting, or as returned values.
             serverSocket.bind(new InetSocketAddress(IP, PORT));
 
-            while (true) {
-                //En Socket er et endpoint (stikkontakt) for kommunikation mellem to maskiner
-                //Socket-metoden Creater en uConnected socket
-                //accept()-metoden lytter efter connections der laves til denne socket og accepterer det. Den blokerer indtil der er lavet en connection
-                Socket socket = serverSocket.accept();
-                new ClientHandler(socket, this).start();
-            }
         } catch (IOException ex) {
             Logger.getLogger(EchoServerSide.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -17,13 +17,13 @@ public interface I_Client {
 
     public void sendMessage(String message);
 
-    public String askForString(String question);
+    public String askForAddress(String question);
 
     public String askForPassword(String question);
 
-    public String askForEmail(String question);
+    public String askForName(String question);
 
-    public int askForInterger(String question);
+    public int askForAge(String question);
 
     public int askForInteger(String question, int min, int max);
 

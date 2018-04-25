@@ -5,57 +5,39 @@
  */
 package control;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import server.EchoServerSide;
+import interfaces.I_Client;
 
 /**
  *
  * @author Menja
  */
-public class ClientHandler extends Thread {
-
-    //Variabler
-    Socket socketConnection; //Socket skaber forbindelse mellem server og client
-    EchoServerSide server;
-    Scanner inputFromClient; //Message from client
-    PrintWriter messageToClient;//Bruges i forbindelse med at der skal komme svar tilbage til client
+public class ClientHandler implements Runnable{
+    //Variables
+    private I_Client i_client;
+    private String name;
+    private String address;
+    private int age;
 
     //Constructor
-    public ClientHandler(Socket socketConnection, EchoServerSide server) throws IOException {
-        //
-        this.socketConnection = socketConnection;
-        this.server = server;
-
-        //
-        inputFromClient = new Scanner(socketConnection.getInputStream());//getInpuStream returner input fra socket
+    public ClientHandler() {
     }
 
-    //Kør tråde
+    public ClientHandler(I_Client i_client) {
+        this.i_client = i_client;
+    }
+
+    //Run conversation with client
     @Override
     public void run() {
-
-        System.out.println("Tråden er startet");
-        this.server.addClientToServer(this);//this referer til clienHandler
-
-        String messageFromClient = inputFromClient.nextLine();//blokerende kald og venter 1 gang
-
-        while (!messageFromClient.toUpperCase().equals("EXIT")) {
-            System.out.println("Hey dette er fra Client: " + messageFromClient);
-            messageFromClient = inputFromClient.nextLine();//sørger for at vente på næste input
-        }
-
-        try {
-            this.server.removeClientFromServer(this);
-            socketConnection.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        name = i_client.askForName("Type your name: ");
+        address = i_client.askForAddress("What is your address? ");
+        age = i_client.askForAge("What is your age? ");
+        
+        i_client.sendMessage("Hi " + name + "\n");
+        i_client.sendMessage("Your address is " + address + "\n");
+        i_client.sendMessage("and you are: " + age + " year old" + "\n");
     }
+    
+    
 
 }
